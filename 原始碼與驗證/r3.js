@@ -224,7 +224,7 @@ function render() {
 }
 
 function renderFoot() {
-  var src = DATA.src === "paste" ? "你貼上的資料" : "內建資料（從示範資料表匯入）";
+  var src = DATA.src === "paste" ? "你貼上的資料" : "內建資料（從設定差異表匯入）";
   var nd = DATA.items.filter(isDiff).length;
   var h = "<div><b>資料來源：</b>" + esc(src) + (DATA.at ? "　" + esc(DATA.at) : "") +
           "　" + DATA.items.length + " 個功能 × " + DATA.plats.length + " 個平台" +
