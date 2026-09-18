@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>平台差異快查</title>
+<style>
+:root{
+  --bg:#F4F8F8; --card:#FFFFFF; --line:#DEE7E8; --line2:#EBF1F2;
+  --ink:#1C2A2C; --ink2:#47575A; --ink3:#5F7072;
+  --brand:#0E6E6E; --brand2:#149191; --brandBg:#E1F2F2;
+  --yes:#1B8A4B; --yesBg:#E3F5EA; --yesLine:#BFE6CE;
+  --no:#6B7683; --noBg:#EDF0F3; --noLine:#DCE2E7;
+  --note:#A6761A; --noteBg:#FBF1D9; --noteLine:#EBDCB3;
+  --blank:#94A2AE; --blankBg:#F7F9FA;
+  --hot:#C0392B; --hotBg:#FBE4E1;
+  --shadow:0 1px 2px rgba(28,42,44,.06),0 2px 8px rgba(28,42,44,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font:15px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px 60px}
+
+header{background:linear-gradient(135deg,#0E6E6E,#149191);color:#fff;padding:18px 0 16px}
+header .wrap{padding-bottom:0}
+h1{margin:0;font-size:21px;letter-spacing:.5px}
+.sub{margin-top:5px;font-size:12.5px;color:#CDEAEA}
+.hdRow{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.hdBtns{display:flex;gap:8px;flex-wrap:wrap}
+.hdBtns button{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);color:#fff;
+  padding:7px 12px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;
+}
+.hdBtns button:hover{background:rgba(255,255,255,.26)}
+
+.bar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);
+     box-shadow:0 2px 6px rgba(28,42,44,.05);padding-top:10px}
+.modes{display:flex;gap:0;margin-bottom:10px;background:#fff;border:1px solid var(--line);
+  border-radius:10px;overflow:hidden;width:fit-content;max-width:100%}
+.modes button{border:0;background:transparent;color:var(--ink2);font-family:inherit;font-size:14px;
+  padding:9px 18px;cursor:pointer;white-space:nowrap;font-weight:700}
+.modes button.on{background:var(--brand);color:#fff}
+.modes button+button{border-left:1px solid var(--line)}
+
+.searchBox{position:relative;margin-bottom:9px}
+.searchBox input{
+  width:100%;padding:12px 40px 12px 40px;font-size:16px;font-family:inherit;
+  border:1.5px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);
+}
+.searchBox input:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(20,145,145,.15)}
+.searchBox .ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.55}
+.searchBox .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;
+  font-size:19px;color:var(--ink3);cursor:pointer;padding:4px 8px;line-height:1}
+.rowLabel{font-size:12px;color:var(--ink3);margin:0 0 5px;font-weight:700;letter-spacing:.5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.chip{
+  border:1px solid var(--line);background:#fff;color:var(--ink2);
+  padding:6px 11px;border-radius:999px;font-size:13px;cursor:pointer;font-family:inherit;
+  white-space:nowrap;transition:.12s;
+}
+.chip:hover{border-color:var(--brand2);color:var(--brand)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.chip small{font-size:11px;opacity:.75;margin-left:3px}
+.chip.tog{border-style:dashed}
+.chip.tog.on{border-style:solid;background:var(--note);border-color:var(--note)}
+
+.stat{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 0 4px;font-size:13px;color:var(--ink3)}
+.stat b{color:var(--ink);font-size:15px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:13px 15px;margin-bottom:11px;box-shadow:var(--shadow)}
+.cTop{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.cName{font-size:16.5px;font-weight:700;line-height:1.45;flex:1 1 240px;min-width:0;word-break:break-word}
+.cName mark{background:#FFE9A8;color:inherit;border-radius:3px;padding:0 2px}
+.secTag{display:inline-block;background:var(--brandBg);color:var(--brand);border-radius:6px;
+  padding:2px 8px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.diffTag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.d-same{background:var(--noBg);color:var(--no)}
+.d-diff{background:var(--noteBg);color:var(--note)}
+
+.grp{border:1px solid var(--line2);border-radius:10px;margin-top:9px;overflow:hidden}
+.grp>.gh{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 11px;background:#F7FAFA;
+  border-bottom:1px solid var(--line2)}
+.pchip{display:inline-block;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700;
+  background:var(--brand);color:#fff;letter-spacing:.5px}
+.pchip.dim{background:#E5EDEE;color:var(--ink2)}
+.gh .allsame{font-size:11.5px;color:var(--ink3);margin-left:2px}
+.grp>.gv{padding:9px 12px;font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.grp>.gv mark{background:#FFE9A8;color:inherit;border-radius:3px;padding:0 2px}
+.grp.k-yes>.gv{background:var(--yesBg);color:#12673A}
+.grp.k-yes{border-color:var(--yesLine)}
+.grp.k-no>.gv{background:var(--noBg);color:var(--no)}
+.grp.k-note>.gv{background:var(--noteBg);color:#7A5612}
+.grp.k-note{border-color:var(--noteLine)}
+.grp.k-blank>.gv{background:var(--blankBg);color:var(--blank);font-style:normal}
+.kbadge{display:inline-block;border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:auto}
+.kb-yes{background:var(--yes);color:#fff}
+.kb-no{background:var(--no);color:#fff}
+.kb-note{background:var(--note);color:#fff}
+.kb-blank{background:var(--blank);color:#fff}
+
+.acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:8px;
+  padding:7px 12px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn:hover{border-color:var(--brand2);color:var(--brand)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.btn.pri:hover{background:var(--brand2);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:4px 9px;font-size:12px}
+
+.secHd{margin:18px 0 8px;font-size:14px;font-weight:700;color:var(--brand);
+  padding-bottom:5px;border-bottom:2px solid var(--brandBg);display:flex;align-items:center;gap:8px}
+.secHd small{font-weight:400;color:var(--ink3);font-size:12px}
+
+.prow{display:grid;grid-template-columns:minmax(120px,220px) 1fr auto;gap:10px;align-items:start;
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:7px;
+  box-shadow:var(--shadow)}
+.prow .pn{font-weight:700;font-size:14px;word-break:break-word}
+.prow .pn mark{background:#FFE9A8;border-radius:3px;padding:0 2px}
+.prow .pv{font-size:13.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;min-width:0}
+.prow .pv mark{background:#FFE9A8;border-radius:3px;padding:0 2px}
+.prow.k-yes{border-left:4px solid var(--yes)}
+.prow.k-no{border-left:4px solid var(--no)}
+.prow.k-note{border-left:4px solid var(--note)}
+.prow.k-blank{border-left:4px solid var(--blank)}
+.prow .side{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.dchip{font-size:11px;border-radius:5px;padding:1px 7px;font-weight:700;white-space:nowrap;
+  background:var(--noteBg);color:var(--note)}
+.dchip.same{background:var(--noBg);color:var(--no)}
+
+.empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:34px 18px;
+  text-align:center;color:var(--ink3);font-size:14px}
+.empty b{display:block;font-size:16px;color:var(--ink);margin-bottom:6px}
+
+.mask{position:fixed;inset:0;background:rgba(18,30,32,.55);z-index:90;display:flex;
+  align-items:center;justify-content:center;padding:14px}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:780px;max-height:92vh;
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.3)}
+.mHd{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;
+  align-items:center;justify-content:space-between;gap:10px}
+.mHd h2{margin:0;font-size:17px}
+.mBd{padding:14px 16px;overflow:auto}
+.mFt{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;
+  justify-content:flex-end;flex-wrap:wrap;background:#FAFCFC}
+.x{border:0;background:transparent;font-size:24px;line-height:1;color:var(--ink3);cursor:pointer;padding:2px 6px}
+textarea.big{width:100%;min-height:180px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace;
+  border:1.5px solid var(--line);border-radius:9px;padding:10px;line-height:1.6;resize:vertical;color:var(--ink)}
+textarea.big:focus{outline:none;border-color:var(--brand2)}
+.hint{font-size:12.5px;color:var(--ink3);line-height:1.8}
+.hint code{background:#E8EFEF;border-radius:4px;padding:1px 5px;font-size:12px}
+.prev{background:#F7FAFA;border:1px solid var(--line2);border-radius:9px;padding:10px 12px;
+  font-size:13px;margin-top:10px;line-height:1.8}
+.prev.bad{background:var(--hotBg);border-color:#F0C6C0;color:var(--hot)}
+.prev.good{background:var(--yesBg);border-color:var(--yesLine);color:#12673A}
+.radios{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2);margin:6px 0 2px}
+.radios label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.radios input{width:16px;height:16px;accent-color:var(--brand)}
+.lg{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 2px}
+.lg span{border-radius:6px;padding:3px 9px;font-size:12px;font-weight:700}
+table.doc{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+table.doc th,table.doc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+table.doc th{background:#EFF5F5;color:var(--ink2);white-space:nowrap}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);
+  background:#1C2A2C;color:#fff;padding:11px 20px;border-radius:10px;font-size:14px;z-index:120;
+  opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--ink3);line-height:1.9}
+footer b{color:var(--ink2)}
+
+@media(max-width:640px){
+  h1{font-size:19px}
+  .wrap{padding:0 11px 50px}
+  .modes button{padding:9px 12px;font-size:13px}
+  .prow{grid-template-columns:1fr;gap:6px}
+  .prow .side{flex-direction:row;align-items:center}
+  .acts .btn{flex:1 1 auto;text-align:center}
+}
+@media print{
+  .bar,.hdBtns,.acts,footer{display:none}
+  .card,.prow{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hdRow">
+      <div>
+        <h1>📱 平台差異快查</h1>
+        <div class="sub">查一個功能各平台差在哪，或查一個平台的所有設定</div>
+      </div>
+      <div class="hdBtns">
+        <button id="btnExport">⬇ 匯出</button>
+        <button id="btnPaste">📋 貼上／更新資料</button>
+        <button id="btnHelp">❓ 使用說明</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="modes">
+      <button id="mFn" class="on">① 查功能</button>
+      <button id="mPl">② 查平台</button>
+    </div>
+    <div class="searchBox">
+      <span class="ic">🔍</span>
+      <input id="q" type="search" autocomplete="off" placeholder="輸入功能名稱，例如：登入驗證、免運門檻、退貨、行動支付、公告">
+      <button class="clr" id="qClr" title="清除" style="display:none">✕</button>
+    </div>
+    <div id="platRow">
+      <div class="rowLabel">平台</div>
+      <div class="chips" id="plats"></div>
+    </div>
+    <div class="rowLabel">分類</div>
+    <div class="chips" id="secs"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="stat" id="stat"></div>
+  <div id="list"></div>
+  <footer id="foot"></footer>
+</div>
+
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================================
+   平台差異快查 — 單一檔案版
+   所有資料只留在這台裝置的瀏覽器（localStorage），不會上傳到任何地方。
+   ========================================================================== */
+"use strict";
+
+/* ---------- 內建資料（來自「示範資料表（设置、后台、手机）.xlsx」） ---------- */
+var BUILTIN = {"at":"示範資料","p":["MA","MB","MC","MD","ME","MF"],"sec":["基本設定","安全相關","分銷相關","訂單相關","行動支付","電子錢包","自動化相關","第三方串接","其它"],"v":["","V","X","有提供","不提供","可以直接開關","需提交申請","示範值：立即生效","示範值：需等待生效","示範值：不支援","示範值：每日上限 10 次","示範值：單筆上限依會員等級調整","示範值：需二次驗證","示範值：僅限電腦版","示範值：全站相同設定","示範值：需聯繫窗口開通"],"i":[{"s":1,"n":"登入雙重驗證","c":[1,1,1,1,1,1]},{"s":1,"n":"密碼錯誤鎖定次數","c":[2,2,2,7,7,7]},{"s":1,"n":"帳號凍結規則","c":[2,2,2,2,2,2]},{"s":0,"n":"暱稱可否修改","c":[4,4,4,9,9,9]},{"s":0,"n":"語系切換","c":[4,4,4,4,4,4]},{"s":0,"n":"時區設定","c":[6,6,6,11,11,11]},{"s":2,"n":"分銷層級上限","c":[6,6,6,6,6,6]},{"s":2,"n":"回饋金計算方式","c":[8,8,8,13,13,13]},{"s":2,"n":"推廣連結格式","c":[8,8,8,8,8,8]},{"s":3,"n":"單筆訂單上限","c":[10,10,10,15,15,15]},{"s":3,"n":"可否取消訂單","c":[10,10,10,10,10,10]},{"s":3,"n":"重複下單限制","c":[12,12,12,2,2,2]},{"s":4,"n":"行動支付付款","c":[12,12,12,12,12,12]},{"s":4,"n":"行動支付退款","c":[14,14,14,4,4,4]},{"s":4,"n":"綁定生效時間","c":[14,14,14,14,14,14]},{"s":5,"n":"電子錢包儲值","c":[1,1,1,6,6,6]},{"s":5,"n":"電子錢包提領","c":[1,1,1,1,1,1]},{"s":5,"n":"支援錢包種類","c":[3,3,3,8,8,8]},{"s":6,"n":"自動補貨通知","c":[2,2,2,2,2,2]},{"s":6,"n":"斷線自動重連","c":[5,5,5,10,10,10]},{"s":7,"n":"第三方額度轉換","c":[4,4,4,4,4,4]},{"s":7,"n":"免登入串接","c":[7,7,7,12,12,12]},{"s":8,"n":"站內信通知","c":[6,6,6,6,6,6]},{"s":8,"n":"公告顯示位置","c":[9,9,9,14,14,14]}]};
+
+/* ---------- 小工具 ---------- */
+var $ = function (s) { return document.querySelector(s); };
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function toast(msg) {
+  var t = $("#toast");
+  t.textContent = msg; t.classList.add("on");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function () { t.classList.remove("on"); }, 2200);
+}
+function cellClean(s) {
+  return String(s == null ? "" : s)
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/* ---------- 繁 → 簡 折疊（讓打繁體也找得到簡體資料） ---------- */
+/* 一繁一簡成對寫，肉眼就能核對。只做繁→簡單向（一個簡體常對到多個繁體）。 */
+var T2S_PAIRS = 
+  "與与專专業业兩两為为麼么樂乐亂乱虧亏雲云產产親亲僅仅從从會会傳传體体偵侦關关內内冊册凍冻擊击劃划則则創创刪删別别區区協协單单廳厅" +
+  "歷历曆历壓压參参雙双發发髮发變变號号後后員员響响團团圍围國国圖图處处備备復复複复頭头夾夹娛娱學学實实對对尋寻導导將将嘗尝盡尽層层" +
+  "屬属幣币帳帐並并應应開开異异彈弹強强當当錄录徑径懷怀態态總总戶户執执護护報报擬拟擇择掛挂擋挡損损換换據据數数斷断無无舊旧時时顯显" +
+  "暫暂術术機机權权條条欄栏樣样檔档檢检沒没測测瀏浏漲涨灣湾點点煩烦狀状環环現现電电畫画碼码確确種种稱称穩稳類类紅红級级紀纪線线組组" +
+  "細细經经綁绑結结給给絡络統统繼继續续維维緩缓編编縮缩網网聯联腦脑艦舰蘇苏蘋苹範范獲获藍蓝虛虚補补裝装見见規规視视覽览計计認认讓让" +
+  "議议訊讯記记論论設设訪访證证詐诈譯译試试詢询該该詳详誤误請请調调諮谘謝谢敗败賬账購购貼贴資资轉转軟软載载較较輯辑邊边達达過过運运" +
+  "還还這这進进連连遲迟適适選选裡里錢钱銀银鏈链鎖锁錯错鍵键閉闭問问間间隊队難难頁页項项順顺須须頻频題题額额風风飛飞餘余饋馈馬马驗验" +
+  "騙骗驟骤龍龙臨临驅驱齊齐圓圆遊游場场標标準准價价買买賣卖費费貨货質质賺赚輪轮軌轨遠远邁迈郵邮鄰邻釋释鏡镜閃闪閱阅陣阵階阶隨随險险" +
+  "雜杂霧雾靈灵領领顆颗願愿飄飘餅饼養养館馆驚惊鬥斗鮮鲜鹽盐麥麦黃黄齒齿節节億亿個个們们說说讀读話话誰谁語语課课講讲謹谨識识讚赞財财" +
+  "貴贵贈赠軍军輛辆輕轻轎轿農农遞递遷迁鄉乡醬酱鑑鉴鐘钟陸陆隱隐雞鸡韓韩頂顶顧顾飯饭驢驴髒脏鳥鸟鴨鸭鵝鹅麗丽龜龟倉仓儀仪兒儿兇凶剛刚" +
+  "劇剧動动務务勞劳匯汇卻却廠厂廣广廢废彌弥徹彻憑凭懶懒戰战擁拥攔拦攜携敵敌斬斩極极榮荣樓楼歐欧歲岁殺杀氣气溫温滿满澤泽濟济燈灯營营" +
+  "獨独獅狮玨珏疊叠皺皱監监盧卢眾众睜睁矯矫礙碍禮礼稅税積积穌稣竊窃筆笔簡简籃篮糧粮紙纸純纯絕绝綜综緊紧縣县織织繳缴罷罢羅罗聲声職职" +
+  "聽听肅肃膚肤臉脸舉举艙舱蓋盖蒐搜蘭兰蟲虫襯衬覺觉觸触訂订診诊註注詞词誠诚諾诺謠谣譽誉貞贞貢贡貧贫販贩責责賀贺賓宾賦赋贊赞赬赪趕赶" +
+  "躍跃軸轴辦办辭辞遺遗邏逻醫医釐厘鋼钢錶表鍋锅鎮镇鐵铁鑰钥長长門门陽阳靜静鞏巩韌韧頑顽頒颁預预頗颇頸颈顏颜颱台飼饲餓饿饑饥馳驰駐驻" +
+  "騎骑驕骄鬧闹魚鱼鮑鲍鹹咸麵面黨党齡龄寫写嗎吗來来東东繞绕終终彙汇庫库啟启離离決决篩筛佔占併并儘尽兌兑勵励勸劝嚴严壞坏夠够奮奋寧宁" +
+  "寬宽寶宝屆届幟帜幾几廚厨彎弯徵征憂忧懲惩戀恋掃扫撐撑擺摆攝摄曬晒楊杨歡欢歸归殘残毀毁溝沟滅灭潔洁濁浊災灾燒烧爐炉爭争爺爷牆墙獄狱" +
+  "畢毕療疗癢痒盜盗碩硕禍祸窮穷簽签籤签糾纠紐纽絆绊綢绸緞缎縫缝繪绘纖纤罰罚聰聪腫肿艱艰葉叶藉借蘊蕴虜虏蝦虾螞蚂蠟蜡衛卫衝冲襪袜覓觅" +
+  "觀观誇夸諒谅謎谜譜谱豐丰豈岂貫贯賤贱贖赎蹟迹軀躯轟轰辯辩逕径遜逊鄭郑醜丑鑄铸閘闸隸隶顫颤飢饥餵喂饒饶騰腾鬆松鬱郁鳳凤鴻鸿齣出傑杰" +
+  "傭佣剝剥匱匮叢丛壘垒壯壮妝妆孫孙崗岗帥帅幫帮廟庙憲宪揀拣斃毙樁桩檻槛瑯琅疇畴睞睐粵粤缽钵羨羡翹翘芻刍蓆席誌志謗谤贍赡輩辈轄辖遙遥" +
+  "醞酝鍾钟鎊镑陝陕靄霭韁缰餃饺駕驾髖髋鬍胡鮭鲑鹼碱麩麸龐庞繫系繋系係系競竞瑪玛夢梦際际慶庆憶忆懇恳攤摊擾扰濱滨燦灿猶犹獵猎瓊琼癥症" +
+  "皰疱矚瞩硯砚礎础稜棱穎颖竄窜綴缀縱纵繽缤罌罂翽翙聳耸脈脉藥药蟬蝉襬摆貳贰賴赖贛赣蹤踪軒轩遼辽鄲郸鑼锣隴陇韋韦顱颅飆飙餌饵駁驳鬚须" +
+  "鯨鲸鹵卤齋斋";
+var T2S = (function () {
+  var m = {}, i;
+  for (i = 0; i + 1 < T2S_PAIRS.length; i += 2) {
+    if (T2S_PAIRS[i] !== T2S_PAIRS[i + 1]) m[T2S_PAIRS[i]] = T2S_PAIRS[i + 1];
+  }
+  return m;
+})();
+function fold(s) {
+  s = String(s == null ? "" : s);
+  var out = "", i, c, cc;
+  for (i = 0; i < s.length; i++) {
+    c = s[i]; cc = s.charCodeAt(i);
+    if (cc >= 0xFF01 && cc <= 0xFF5E) c = String.fromCharCode(cc - 0xFEE0);
+    else if (cc === 0x3000) c = " ";
+    else if (T2S[c]) c = T2S[c];
+    out += c;
+  }
+  return out.toLowerCase();
+}
+var PUNCT = /[\s、，。；：！？…—–\-_/\\|()\[\]{}<>【】「」『』《》〈〉"'“”‘’*#~`^$%@+=,.;:!?]+/g;
+function bare(s) { return fold(s).replace(PUNCT, ""); }
+
+/* ==========================================================================
+   格子內容 → 狀態
+   原表的寫法：V／v／✓＝有；X／x／N＝沒有；空白＝沒寫；其餘一律當「有說明」。
+   ⚠ 「V（一个帐号仅能绑定一个）」這種是「有，而且有附註」，
+      算成「有」但把文字照樣顯示出來 —— 只看顏色會漏掉括號裡的限制。
+   ========================================================================== */
+function kindOf(v) {
+  var t = String(v == null ? "" : v).replace(/\s/g, "");
+  if (!t) return "blank";
+  if (/^[VvＶ✓✔○●]$/.test(t)) return "yes";
+  if (/^[XxＸ×✕✖NnＮ]$/.test(t)) return "no";
+  if (/^(有|可|支援|支持|開放|开放)$/.test(t)) return "yes";
+  if (/^(无|無|沒有|没有|不支援|不支持|無此功能|无此功能|不提供|未開放|未开放)$/.test(t)) return "no";
+  return "note";
+}
+var KIND = {
+  yes:   { label: "有",   cls: "k-yes",   badge: "kb-yes" },
+  no:    { label: "沒有", cls: "k-no",    badge: "kb-no" },
+  note:  { label: "說明", cls: "k-note",  badge: "kb-note" },
+  blank: { label: "未填", cls: "k-blank", badge: "kb-blank" }
+};
+function showText(v, k) {
+  if (k === "blank") return "（原表這一格是空的）";
+  if (k === "no" && String(v).replace(/\s/g, "").length <= 2) return "沒有這個功能";
+  return v;
+}
+
+/* ==========================================================================
+   搜尋
+   功能名稱都很短，所以名稱走「模糊比對」，比不到才去翻格子內容。
+   ========================================================================== */
+function fuzzy(hay, q) {
+  if (!q) return 0;
+  if (!hay) return -1;
+  if (hay === q) return 1000;
+  if (hay.indexOf(q) === 0) return 900 - Math.min(hay.length, 40);
+  var p = hay.indexOf(q);
+  if (p > 0) return 800 - p * 2 - Math.min(hay.length, 40) * 0.2;
+  var i = 0, j = 0, first = -1, prev = -1, gaps = 0;
+  while (i < hay.length && j < q.length) {
+    if (hay.charAt(i) === q.charAt(j)) {
+      if (first < 0) first = i;
+      if (prev >= 0 && i - prev > 1) gaps += (i - prev - 1);
+      prev = i; j++;
+    }
+    i++;
+  }
+  if (j < q.length) return -1;
+  return 500 - gaps * 4 - first * 2 - Math.min(hay.length, 40) * 0.2;
+}
+/* 把命中的字標起來（bare 會刪標點，所以逐字對回原位置） */
+function hilite(raw, q) {
+  raw = String(raw == null ? "" : raw);
+  if (!q || !raw) return esc(raw);
+  var i, mark = [], pos = [], b = "";
+  for (i = 0; i < raw.length; i++) mark[i] = false;
+  for (i = 0; i < raw.length; i++) {
+    var f = fold(raw[i]);
+    PUNCT.lastIndex = 0;
+    if (PUNCT.test(f)) { PUNCT.lastIndex = 0; continue; }
+    PUNCT.lastIndex = 0;
+    b += f; pos.push(i);
+  }
+  var at = b.indexOf(q), k;
+  if (at >= 0) {
+    while (at >= 0) {
+      for (k = at; k < at + q.length && k < pos.length; k++) mark[pos[k]] = true;
+      at = b.indexOf(q, at + 1);
+    }
+  } else {
+    var j = 0;
+    for (i = 0; i < b.length && j < q.length; i++) {
+      if (b.charAt(i) === q.charAt(j)) { mark[pos[i]] = true; j++; }
+    }
+    if (j < q.length) return esc(raw);
+  }
+  var out = "", on = false;
+  for (i = 0; i < raw.length; i++) {
+    if (mark[i] && !on) { out += "<mark>"; on = true; }
+    if (!mark[i] && on) { out += "</mark>"; on = false; }
+    out += esc(raw[i]);
+  }
+  return out + (on ? "</mark>" : "");
+}
+
+/* ==========================================================================
+   把相同的平台併成一組 —— 這是這個工具的重點
+   「哪些平台一樣、哪些不一樣」比「八個平台各印一遍」好讀太多。
+   ========================================================================== */
+function groupsOf(vals, plats) {
+  var order = [], byVal = {};
+  vals.forEach(function (v, i) {
+    var key = String(v);
+    if (byVal[key] === undefined) { byVal[key] = { v: v, ps: [] }; order.push(key); }
+    byVal[key].ps.push(plats[i]);
+  });
+  return order.map(function (k) {
+    var g = byVal[k];
+    return { v: g.v, ps: g.ps, kind: kindOf(g.v) };
+  });
+}
+
+/* ==========================================================================
+   貼上的表格 → 資料
+   ========================================================================== */
+function splitTable(text, delim) {
+  var s = String(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  var rows = [], row = [], cell = "", i = 0, q = false, c;
+  while (i < s.length) {
+    c = s[i];
+    if (q) {
+      if (c === '"') { if (s[i + 1] === '"') { cell += '"'; i += 2; continue; } q = false; i++; continue; }
+      cell += c; i++; continue;
+    }
+    if (c === '"' && cell === "") { q = true; i++; continue; }
+    if (c === delim) { row.push(cell); cell = ""; i++; continue; }
+    if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; i++; continue; }
+    cell += c; i++;
+  }
+  row.push(cell); rows.push(row);
+  return rows.filter(function (r) {
+    return r.some(function (x) { return String(x).trim() !== ""; });
+  });
+}
+
+/* 剪貼簿 HTML（合併儲存格的正解：純文字只有左上角有值，救不回來） */
+function htmlCellText(s) {
+  return String(s == null ? "" : s)
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|tr)>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"').replace(/&#39;/gi, "'")
+    .replace(/&amp;/gi, "&")
+    .replace(/\r\n?/g, "\n").replace(/[ \t]+\n/g, "\n").trim();
+}
+function parseHtmlGrid(html) {
+  var tm = /<table[\s\S]*?<\/table>/i.exec(String(html || ""));
+  if (!tm) return null;
+  var rowRe = /<tr\b[^>]*>([\s\S]*?)<\/tr>/gi, rm, raw = [];
+  while ((rm = rowRe.exec(tm[0]))) {
+    var cellRe = /<t[dh]\b([^>]*)>([\s\S]*?)<\/t[dh]>/gi, cm, cells = [];
+    while ((cm = cellRe.exec(rm[1]))) {
+      var att = cm[1] || "";
+      var rs = /rowspan\s*=\s*"?'?(\d+)/i.exec(att);
+      var cs = /colspan\s*=\s*"?'?(\d+)/i.exec(att);
+      cells.push({
+        t: htmlCellText(cm[2]),
+        rs: rs ? Math.max(1, parseInt(rs[1], 10)) : 1,
+        cs: cs ? Math.max(1, parseInt(cs[1], 10)) : 1
+      });
+    }
+    raw.push(cells);
+  }
+  if (!raw.length) return null;
+  var grid = [], taken = {}, r, k, c, i, j;
+  for (r = 0; r < raw.length; r++) if (!grid[r]) grid[r] = [];
+  for (r = 0; r < raw.length; r++) {
+    c = 0;
+    for (k = 0; k < raw[r].length; k++) {
+      while (taken[r + "," + c]) c++;
+      for (i = 0; i < raw[r][k].rs; i++) {
+        for (j = 0; j < raw[r][k].cs; j++) {
+          if (!grid[r + i]) grid[r + i] = [];
+          grid[r + i][c + j] = raw[r][k].t;
+          taken[(r + i) + "," + (c + j)] = 1;
+        }
+      }
+      c += raw[r][k].cs;
+    }
+  }
+  for (r = 0; r < grid.length; r++)
+    for (c = 0; c < grid[r].length; c++) if (grid[r][c] === undefined) grid[r][c] = "";
+  grid = grid.filter(function (row) {
+    return row.some(function (x) { return String(x).trim() !== ""; });
+  });
+  return grid.length ? grid : null;
+}
+
+/* 找表頭列：第一格空白（或寫「功能」之類）、右邊是一排短短的平台代號 */
+function findHeader(rows) {
+  var i, j, r, cand, best = null;
+  for (i = 0; i < Math.min(8, rows.length); i++) {
+    r = rows[i];
+    cand = [];
+    for (j = 1; j < r.length; j++) {
+      var v = cellClean(r[j]).replace(/\s/g, "");
+      if (!v) { if (cand.length) break; else continue; }
+      if (v.length > 8) { cand = []; break; }      /* 太長 → 不是代號列 */
+      cand.push({ col: j, name: v });
+    }
+    if (cand.length >= 2 && (!best || cand.length > best.plats.length)) {
+      best = { row: i, plats: cand };
+    }
+  }
+  return best;
+}
+
+/* 解析貼上的內容。回傳 {ok, plats, secs, items, msg} */
+function parsePasted(text, opt) {
+  opt = opt || {};
+  var rows;
+  if (opt.grid && opt.grid.length) rows = opt.grid;
+  else rows = splitTable(text, text.indexOf("\t") >= 0 ? "\t" : ",");
+  if (!rows || rows.length < 2) return { ok: false, msg: "看起來不像表格，至少要有標題列＋一列資料。" };
+
+  var hd = findHeader(rows);
+  if (!hd) return { ok: false, msg: "找不到平台代號那一列。第一列要是「（空白）＋MF＋ME＋…」這種格式，整張表一起複製進來。" };
+
+  var plats = hd.plats.map(function (p) { return p.name; });
+  var cols = hd.plats.map(function (p) { return p.col; });
+  var secs = [], items = [], sec = "";
+
+  for (var i = hd.row + 1; i < rows.length; i++) {
+    var r = rows[i];
+    var nm = cellClean(r[0]).replace(/\s+/g, " ");
+    var vals = cols.map(function (c) { return cellClean(r[c]); });
+    var hasVal = vals.some(function (v) { return v !== ""; });
+
+    /* 只有第一格有字 → 分節標題 */
+    if (!hasVal) {
+      if (nm) { sec = nm; if (secs.indexOf(sec) < 0) secs.push(sec); }
+      continue;
+    }
+    /* 沒名稱、或與上一筆同名 → 接在上一筆後面（原表把一個功能拆成兩列） */
+    var prev = items.length ? items[items.length - 1] : null;
+    if (prev && (!nm || nm === prev.n)) {
+      prev.vals = prev.vals.map(function (v, k) {
+        return (v && vals[k]) ? v + "\n" + vals[k] : (v || vals[k]);
+      });
+      continue;
+    }
+    if (!nm) continue;
+    if (sec && secs.indexOf(sec) < 0) secs.push(sec);
+    items.push({ sec: sec, n: nm, vals: vals });
+  }
+
+  if (!items.length) return { ok: false, msg: "有讀到平台代號，但下面沒有任何功能項目。" };
+  return { ok: true, plats: plats, secs: secs, items: items };
+}
+
+/* ---------- 匯出 ---------- */
+function tsvCell(v) {
+  var s = String(v == null ? "" : v);
+  return /[\t\n"]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+
+/* ==========================================================================
+   狀態與儲存
+   ========================================================================== */
+var K_DATA = "pdiff.data.v1", K_UI = "pdiff.ui.v1";
+var DATA = null, MODE = "fn", PLAT = "", SEC = "*", Q = "", QB = "", DIFFONLY = false, PAGE = 40;
+/* 一打開先不要列結果 —— 等使用者打字或點了分類／平台再顯示。不記進 localStorage。 */
+var SHOWALL = false;
+
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+/* 內建資料是「字串池 ＋ 索引」，這裡攤平回一般物件 */
+function decodeBuiltin() {
+  if (!BUILTIN || !BUILTIN.i) return null;
+  return {
+    src: "builtin", at: BUILTIN.at || "",
+    plats: BUILTIN.p.slice(), secs: BUILTIN.sec.slice(),
+    items: BUILTIN.i.map(function (x) {
+      return { sec: BUILTIN.sec[x.s] || "", n: x.n, vals: x.c.map(function (k) { return BUILTIN.v[k]; }) };
+    })
+  };
+}
+function loadAll() {
+  var raw = lsGet(K_DATA), d = null;
+  if (raw) { try { d = JSON.parse(raw); } catch (e) { d = null; } }
+  if (!d || !d.items || !d.items.length) d = decodeBuiltin();
+  DATA = d || { src: "builtin", at: "", plats: [], secs: [], items: [] };
+  DATA.items.forEach(function (it, i) { it._i = i; });
+  try {
+    var u = JSON.parse(lsGet(K_UI) || "{}");
+    if (u.mode) MODE = u.mode;
+    if (u.sec) SEC = u.sec;
+    if (u.plat) PLAT = u.plat;
+    if (typeof u.diff === "boolean") DIFFONLY = u.diff;
+  } catch (e) {}
+  if (DATA.plats.indexOf(PLAT) < 0) PLAT = DATA.plats[0] || "";
+}
+function saveUI() { lsSet(K_UI, JSON.stringify({ mode: MODE, sec: SEC, plat: PLAT, diff: DIFFONLY })); }
+
+/* ==========================================================================
+   查詢
+   ========================================================================== */
+function isDiff(it) {
+  for (var i = 1; i < it.vals.length; i++) if (it.vals[i] !== it.vals[0]) return true;
+  return false;
+}
+function hayOf(it) {
+  if (!it._hay) it._hay = bare([it.n, it.sec, it.vals.join(" ")].join(" "));
+  return it._hay;
+}
+function nameBare(it) {
+  if (!it._nb) it._nb = bare(it.n);
+  return it._nb;
+}
+
+function currentList() {
+  var out = [];
+  DATA.items.forEach(function (it) {
+    if (SEC !== "*" && it.sec !== SEC) return;
+    if (DIFFONLY && !isDiff(it)) return;
+    var score = 0;
+    if (QB) {
+      var s = fuzzy(nameBare(it), QB);
+      if (s < 0) {
+        /* 名稱比不到 → 翻格子內容，但排在名稱命中的後面 */
+        if (hayOf(it).indexOf(QB) < 0) return;
+        s = -500;
+      }
+      score = s;
+    }
+    out.push({ it: it, s: score });
+  });
+  if (QB) out.sort(function (a, b) { return b.s - a.s || a.it._i - b.it._i; });
+  return out;
+}
+
+/* ==========================================================================
+   畫面
+   ========================================================================== */
+function renderModes() {
+  $("#mFn").className = MODE === "fn" ? "on" : "";
+  $("#mPl").className = MODE === "pl" ? "on" : "";
+  $("#platRow").style.display = MODE === "pl" ? "" : "none";
+  $("#q").placeholder = MODE === "fn"
+    ? "輸入功能名稱，例如：登入驗證、免運門檻、退貨、行動支付、公告"
+    : "在這個平台裡找功能，例如：登入驗證、免運門檻、退貨";
+}
+function renderPlats() {
+  var h = "";
+  DATA.plats.forEach(function (p) {
+    h += '<button class="chip' + (PLAT === p ? " on" : "") + '" data-plat="' + esc(p) + '">' + esc(p) + "</button>";
+  });
+  $("#plats").innerHTML = h;
+}
+function renderSecs() {
+  var n = {};
+  DATA.items.forEach(function (it) {
+    if (DIFFONLY && !isDiff(it)) return;
+    n[it.sec] = (n[it.sec] || 0) + 1;
+  });
+  var tot = 0;
+  Object.keys(n).forEach(function (k) { tot += n[k]; });
+  var h = '<button class="chip' + (SEC === "*" ? " on" : "") + '" data-sec="*">全部 <small>' + tot + "</small></button>";
+  DATA.secs.forEach(function (s) {
+    if (!n[s]) return;
+    h += '<button class="chip' + (SEC === s ? " on" : "") + '" data-sec="' + esc(s) + '">' +
+         esc(s) + " <small>" + n[s] + "</small></button>";
+  });
+  h += '<button class="chip tog' + (DIFFONLY ? " on" : "") + '" data-diff="1">' +
+       (DIFFONLY ? "☑" : "☐") + " 只看有差異的</button>";
+  $("#secs").innerHTML = h;
+}
+
+function pchips(ps, dim) {
+  return ps.map(function (p) {
+    return '<span class="pchip' + (dim ? " dim" : "") + '">' + esc(p) + "</span>";
+  }).join("");
+}
+
+/* ── 模式一：查功能 ── */
+function fnCardHtml(item) {
+  var it = item.it, h = "";
+  var gs = groupsOf(it.vals, DATA.plats);
+  var diff = gs.length > 1;
+
+  h += '<div class="card"><div class="cTop">';
+  h += '<div class="cName">' + hilite(it.n, QB) + "</div>";
+  if (it.sec) h += '<span class="secTag">' + esc(it.sec) + "</span>";
+  h += '<span class="diffTag ' + (diff ? "d-diff" : "d-same") + '">' +
+       (diff ? "有差異・" + gs.length + " 種" : "全平台相同") + "</span>";
+  h += "</div>";
+
+  gs.forEach(function (g, gi) {
+    var k = KIND[g.kind];
+    h += '<div class="grp ' + k.cls + '"><div class="gh">';
+    h += pchips(g.ps, false);
+    if (!diff) h += '<span class="allsame">（' + g.ps.length + " 個平台都一樣）</span>";
+    h += '<span class="kbadge ' + k.badge + '">' + k.label + "</span>";
+    h += "</div>";
+    h += '<div class="gv">' + hilite(showText(g.v, g.kind), QB) + "</div>";
+    h += "</div>";
+  });
+  h += "</div>";
+  return h;
+}
+
+/* ── 模式二：查平台 ── */
+function plRowHtml(item, pi) {
+  var it = item.it, v = it.vals[pi], k = kindOf(v);
+  var same = 0, i;
+  for (i = 0; i < it.vals.length; i++) if (it.vals[i] === v) same++;
+  var diff = isDiff(it);
+
+  var h = '<div class="prow ' + KIND[k].cls + '">';
+  h += '<div class="pn">' + hilite(it.n, QB) + "</div>";
+  h += '<div class="pv">' + hilite(showText(v, k), QB) + "</div>";
+  h += '<div class="side">';
+  h += '<span class="kbadge ' + KIND[k].badge + '">' + KIND[k].label + "</span>";
+  if (!diff) h += '<span class="dchip same">全平台相同</span>';
+  else if (same === 1) h += '<span class="dchip">只有這個平台這樣</span>';
+  else h += '<span class="dchip">與其他 ' + (same - 1) + " 個平台相同</span>";
+  h += "</div></div>";
+  return h;
+}
+
+function idleHtml() {
+  return '<div class="empty"><b>先輸入功能名稱</b>' +
+    "例如：登入驗證、免運門檻、退貨、行動支付、公告——打繁體也找得到簡體。<br>" +
+    "也可以先點上面的分類，或切到「② 查平台」看某個平台的全部設定。" +
+    '<div style="margin-top:14px"><button class="btn pri" id="showAll">📋 直接看全部 ' +
+    DATA.items.length + ' 個功能</button></div></div>';
+}
+
+function render() {
+  if (!QB && !SHOWALL) {
+    $("#stat").innerHTML = "<span>共 <b>" + DATA.items.length + "</b> 個功能、" +
+      DATA.plats.length + " 個平台，等你查</span>";
+    $("#list").innerHTML = idleHtml();
+    renderFoot();
+    return;
+  }
+  var list = currentList();
+  var pi = DATA.plats.indexOf(PLAT);
+  var s = "";
+
+  if (MODE === "fn") {
+    var nd = list.filter(function (x) { return isDiff(x.it); }).length;
+    s = "<span>找到 <b>" + list.length + "</b> 個功能</span>";
+    s += "<span>・其中有差異 <b>" + nd + "</b> 個</span>";
+  } else {
+    s = "<span>平台 <b>" + esc(PLAT || "—") + "</b></span><span>・<b>" + list.length + "</b> 個功能</span>";
+  }
+  if (list.length > PAGE) s += "<span>・先顯示前 " + PAGE + " 個</span>";
+  $("#stat").innerHTML = s;
+
+  if (!list.length) {
+    $("#list").innerHTML = '<div class="empty"><b>沒有找到符合的功能</b>' +
+      "換個關鍵字，或把上面的分類切回「全部」。" +
+      (DIFFONLY ? "<br>目前開著「只看有差異的」，全平台一樣的功能不會出現。" : "") + "</div>";
+    renderFoot();
+    return;
+  }
+
+  var shown = list.slice(0, PAGE), h = "", lastSec = null;
+  if (MODE === "fn") {
+    shown.forEach(function (x) { h += fnCardHtml(x); });
+  } else {
+    shown.forEach(function (x) {
+      if (!QB && x.it.sec !== lastSec) {
+        lastSec = x.it.sec;
+        h += '<div class="secHd">' + esc(lastSec || "未分類") + "</div>";
+      }
+      h += plRowHtml(x, pi);
+    });
+  }
+  if (list.length > PAGE) {
+    h += '<div style="text-align:center;margin:8px 0 4px">' +
+         '<button class="btn" id="more">▼ 再顯示 40 個（還有 ' + (list.length - PAGE) + "）</button></div>";
+  }
+  $("#list").innerHTML = h;
+  renderFoot();
+}
+
+function renderFoot() {
+  var src = DATA.src === "paste" ? "你貼上的資料" : "內建資料（從示範資料表匯入）";
+  var nd = DATA.items.filter(isDiff).length;
+  var h = "<div><b>資料來源：</b>" + esc(src) + (DATA.at ? "　" + esc(DATA.at) : "") +
+          "　" + DATA.items.length + " 個功能 × " + DATA.plats.length + " 個平台" +
+          "（有差異 " + nd + "、全平台相同 " + (DATA.items.length - nd) + "）</div>";
+  h += "<div><b>顏色：</b>";
+  ["yes", "no", "note", "blank"].forEach(function (k) {
+    h += '<span class="kbadge ' + KIND[k].badge + '" style="margin:0 5px 4px 0">' + KIND[k].label + "</span>";
+  });
+  h += "有＝格子寫 V；沒有＝寫 X／N；說明＝格子裡是文字；未填＝原表是空的。</div>";
+  h += "<div>資料只存在這台裝置的瀏覽器，關掉網頁不會消失，也不會上傳到任何地方。" +
+       "<b>這裡放的是示範資料；換成自己的資料後，請依所屬單位的規定保管。</b></div>";
+  h += '<div style="margin-top:8px"><button class="btn" id="btnReset">↩ 回復成內建資料</button> ' +
+       '<button class="btn" id="btnWipe">🧹 清除這台裝置存的資料</button></div>';
+  $("#foot").innerHTML = h;
+}
+
+/* ==========================================================================
+   複製
+   ========================================================================== */
+function copyText(txt, okMsg) {
+  function fallback() {
+    var ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.cssText = "position:fixed;left:-9999px;top:0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : "這個瀏覽器不給自動複製，請手動選取");
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function () { toast(okMsg); }, fallback);
+  } else fallback();
+}
+/* ==========================================================================
+   彈窗
+   ========================================================================== */
+function closeModal() { $("#modal").innerHTML = ""; }
+function openModal(title, body, foot) {
+  $("#modal").innerHTML =
+    '<div class="mask" id="mask"><div class="modal">' +
+    '<div class="mHd"><h2>' + title + '</h2><button class="x" id="mx">×</button></div>' +
+    '<div class="mBd">' + body + "</div>" +
+    (foot ? '<div class="mFt">' + foot + "</div>" : "") +
+    "</div></div>";
+  $("#mx").onclick = closeModal;
+  $("#mask").onclick = function (e) { if (e.target.id === "mask") closeModal(); };
+}
+
+/* ---------- 匯出 ---------- */
+function exportTsv(scope) {
+  var items = DATA.items.filter(function (it) { return scope !== "diff" || isDiff(it); });
+  var out = [[""].concat(DATA.plats).map(tsvCell).join("\t")];
+  var lastSec = null;
+  items.forEach(function (it) {
+    if (it.sec && it.sec !== lastSec) {
+      lastSec = it.sec;
+      out.push([tsvCell(it.sec)].concat(DATA.plats.map(function () { return ""; })).join("\t"));
+    }
+    out.push([tsvCell(it.n)].concat(it.vals.map(tsvCell)).join("\t"));
+  });
+  return { text: out.join("\n"), n: items.length };
+}
+function openExport() {
+  var body =
+    '<div class="hint">產生 Tab 分隔的文字，複製後在試算表點第一格 <code>Ctrl+V</code> 就會落到各欄。' +
+    "格式與原表一樣（第一列是平台代號、分類自成一列），有換行的欄位會用雙引號包起來。</div>" +
+    '<div class="rowLabel" style="margin-top:10px">要匯出哪些</div>' +
+    '<div class="radios"><label><input type="radio" name="xs" value="all" checked>全部功能</label>' +
+    '<label><input type="radio" name="xs" value="diff">只有平台間有差異的</label></div>' +
+    '<textarea class="big" id="xOut" readonly style="margin-top:10px;min-height:210px"></textarea>' +
+    '<div class="prev" id="xInfo"></div>';
+  openModal("⬇ 匯出 Tab 文字", body,
+    '<button class="btn" id="xClose">關閉</button><button class="btn pri" id="xCopy">複製全部</button>');
+  $("#xClose").onclick = closeModal;
+  function refresh() {
+    var scope = document.querySelector('input[name=xs]:checked').value;
+    var r = exportTsv(scope);
+    $("#xOut").value = r.text;
+    $("#xInfo").textContent = "共 " + r.n + " 個功能 × " + DATA.plats.length + " 個平台。";
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=xs]'),
+    function (el) { el.onchange = refresh; });
+  refresh();
+  $("#xCopy").onclick = function () { copyText($("#xOut").value, "已複製，可以貼進試算表了"); };
+}
+
+/* ---------- 貼上／更新 ---------- */
+var PGRID = null, PGRID_TXT = null;
+function openPaste() {
+  var body =
+    '<div class="hint">在試算表按 <code>Ctrl+A</code> 選整張表 → <code>Ctrl+C</code> → 點下面的框 → <code>Ctrl+V</code>。' +
+    "<b>第一列（平台代號那一列）一定要一起複製</b>，程式靠它認平台。<br>" +
+    "從試算表直接貼上時，合併儲存格會一起正確帶進來。</div>" +
+    '<textarea class="big" id="pTxt" placeholder="在這裡貼上表格…"></textarea>' +
+    '<div class="prev" id="pPrev">還沒貼上資料。</div>';
+  openModal("📋 貼上／更新資料", body,
+    '<button class="btn" id="pCancel">取消</button><button class="btn pri" id="pOk" disabled>套用這份資料</button>');
+  var ta = $("#pTxt"), tmr = null, RES = null;
+  PGRID = null; PGRID_TXT = null;
+
+  ta.addEventListener("paste", function (e) {
+    var html = "";
+    try { html = (e.clipboardData || window.clipboardData).getData("text/html") || ""; } catch (err) { html = ""; }
+    PGRID = html ? parseHtmlGrid(html) : null;
+    setTimeout(function () { PGRID_TXT = ta.value; preview(); }, 0);
+  });
+  ta.addEventListener("input", function () { clearTimeout(tmr); tmr = setTimeout(preview, 260); });
+  $("#pCancel").onclick = closeModal;
+  setTimeout(function () { ta.focus(); }, 60);
+
+  function gridNow() { return (PGRID && PGRID_TXT === ta.value) ? PGRID : null; }
+
+  function preview() {
+    var txt = ta.value, prev = $("#pPrev");
+    RES = null; $("#pOk").disabled = true;
+    if (!txt.trim()) { prev.className = "prev"; prev.textContent = "還沒貼上資料。"; return; }
+    var g = gridNow(), res;
+    try { res = parsePasted(txt, { grid: g }); }
+    catch (e) { res = { ok: false, msg: "解析時出錯了：" + e.message }; }
+    if (!res.ok) { prev.className = "prev bad"; prev.innerHTML = "❌ " + esc(res.msg); return; }
+    RES = res;
+    var nd = res.items.filter(function (it) {
+      for (var i = 1; i < it.vals.length; i++) if (it.vals[i] !== it.vals[0]) return true;
+      return false;
+    }).length;
+    prev.className = "prev good";
+    prev.innerHTML = "✅ 讀到了 <b>" + res.items.length + "</b> 個功能 × <b>" + res.plats.length + "</b> 個平台<br>" +
+      "平台：" + esc(res.plats.join("、")) + "<br>" +
+      "分類：" + esc(res.secs.join("、") || "（沒有分類列）") + "<br>" +
+      "有差異的功能：" + nd + " 個" +
+      (g ? '<br><b style="color:#1B8A4B">✔ 從試算表直接讀到合併儲存格，資料是精準還原的。</b>'
+         : '<br><span style="color:#A6761A">這是純文字貼上；從試算表直接 Ctrl+C／Ctrl+V 會更準。</span>');
+    $("#pOk").disabled = false;
+  }
+
+  $("#pOk").onclick = function () {
+    if (!RES) return;
+    var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+    var d = new Date();
+    DATA = {
+      src: "paste",
+      at: d.getFullYear() + "/" + pad(d.getMonth() + 1) + "/" + pad(d.getDate()) + " " +
+          pad(d.getHours()) + ":" + pad(d.getMinutes()) + " 貼上",
+      plats: RES.plats, secs: RES.secs, items: RES.items
+    };
+    DATA.items.forEach(function (it, i) { it._i = i; delete it._hay; delete it._nb; });
+    if (!lsSet(K_DATA, JSON.stringify(DATA))) toast("瀏覽器儲存空間不足，這份資料只在這個分頁有效");
+    if (DATA.plats.indexOf(PLAT) < 0) PLAT = DATA.plats[0] || "";
+    SEC = "*"; saveUI(); closeModal();
+    renderPlats(); renderSecs(); PAGE = 40; render();
+    toast("已更新：" + DATA.items.length + " 個功能");
+  };
+}
+
+/* ---------- 使用說明 ---------- */
+function openHelp() {
+  var body =
+    '<div class="hint">' +
+    "<p><b>兩種查法</b><br>" +
+    "<b>① 查功能</b>：打功能名稱（例如「登入驗證」「免運門檻」「退貨」），會列出這個功能<b>各平台的差別</b>。" +
+    "值一樣的平台會自動併成同一組，所以一眼就看得到「哪幾家一樣、哪幾家不一樣」。<br>" +
+    "<b>② 查平台</b>：先點一個平台代號，再往下看它所有功能的設定，右邊會標「只有這個平台這樣」或「與其他 N 個平台相同」。</p>" +
+    "<p><b>只看有差異的</b><br>分類那一排最後面有這顆。整張表有三分之一的功能是<b>八個平台完全一樣</b>的，" +
+    "打開它就只剩真正有差別的，找差異快很多。</p>" +
+    "<p><b>顏色</b></p><div class=\"lg\">" +
+    ["yes", "no", "note", "blank"].map(function (k) {
+      return '<span class="kbadge ' + KIND[k].badge + '">' + KIND[k].label + "</span>";
+    }).join("") +
+    "</div><p>有＝格子寫 V；沒有＝寫 X 或 N；說明＝格子裡是一段文字（會整段顯示）；未填＝原表那一格是空的。<br>" +
+    "⚠️ 像「V（一個支付寶帳號只能綁一個）」這種<b>算「有」但底下的文字照樣顯示</b>——只看顏色會漏掉括號裡的限制。</p>" +
+    "<p><b>搜尋</b><br>打繁體找得到簡體（打「門檻」會找到「门槛」）。" +
+    "名稱找不到時會去翻格子內容，所以打「登入验证」也查得到。命中的字會用黃底標起來。</p>" +
+    "<p><b>更新資料</b><br>原表有變動時按「📋 貼上／更新資料」重貼一次；" +
+    "「⬇ 匯出」可以把目前資料變回 Tab 文字貼回試算表，也可以只匯出有差異的那些。</p>" +
+    "<p><b>隱私</b><br>整個工具就是一個 HTML 檔，沒有連任何網路服務。資料只寫在這台裝置瀏覽器的 localStorage。</p>" +
+    "</div>";
+  openModal("❓ 使用說明", body, '<button class="btn pri" id="hOk">知道了</button>');
+  $("#hOk").onclick = closeModal;
+}
+
+/* ==========================================================================
+   事件
+   ========================================================================== */
+function bind() {
+  var q = $("#q"), tmr = null;
+  q.addEventListener("input", function () {
+    clearTimeout(tmr);
+    tmr = setTimeout(function () {
+      Q = q.value; QB = bare(Q); PAGE = 40;
+      $("#qClr").style.display = Q ? "" : "none";
+      render();
+    }, 130);
+  });
+  $("#qClr").onclick = function () {
+    q.value = ""; Q = ""; QB = ""; this.style.display = "none"; PAGE = 40; render(); q.focus();
+  };
+
+  $("#mFn").onclick = function () { MODE = "fn"; PAGE = 40; saveUI(); renderModes(); render(); };
+  $("#mPl").onclick = function () { MODE = "pl"; SHOWALL = true; PAGE = 40; saveUI(); renderModes(); render(); };
+
+  $("#plats").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-plat]"); if (!b) return;
+    PLAT = b.getAttribute("data-plat"); SHOWALL = true; PAGE = 40; saveUI(); renderPlats(); render();
+  });
+  $("#secs").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-sec],[data-diff]"); if (!b) return;
+    if (b.getAttribute("data-diff")) DIFFONLY = !DIFFONLY;
+    else SEC = b.getAttribute("data-sec");
+    SHOWALL = true;
+    PAGE = 40; saveUI(); renderSecs(); render();
+  });
+
+  $("#list").addEventListener("click", function (e) {
+    if (e.target.closest("#more")) { PAGE += 40; render(); return; }
+    if (e.target.closest("#showAll")) { SHOWALL = true; PAGE = 40; render(); }
+  });
+
+  $("#foot").addEventListener("click", function (e) {
+    if (e.target.id === "btnReset") {
+      if (!confirm("要把資料回復成內建的那一份嗎？\n（你貼上的那份會被清掉）")) return;
+      lsDel(K_DATA); loadAll(); SEC = "*"; PAGE = 40;
+      renderModes(); renderPlats(); renderSecs(); render(); toast("已回復成內建資料");
+    }
+    if (e.target.id === "btnWipe") {
+      if (!confirm("要清掉這台裝置存的所有資料與設定嗎？\n（下次打開會回到內建資料）")) return;
+      lsDel(K_DATA); lsDel(K_UI);
+      MODE = "fn"; SEC = "*"; DIFFONLY = false; Q = ""; QB = "";
+      $("#q").value = ""; $("#qClr").style.display = "none";
+      loadAll(); PAGE = 40;
+      renderModes(); renderPlats(); renderSecs(); render(); toast("已清除");
+    }
+  });
+
+  $("#btnExport").onclick = openExport;
+  $("#btnPaste").onclick = openPaste;
+  $("#btnHelp").onclick = openHelp;
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeModal();
+    if (e.key === "/" && document.activeElement !== q && !$("#mask")) { e.preventDefault(); q.focus(); }
+  });
+}
+
+/* ---------- 啟動 ---------- */
+loadAll();
+renderModes();
+renderPlats();
+renderSecs();
+render();
+bind();
+
+</script>
+</body>
+</html>
